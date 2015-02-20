@@ -32,6 +32,7 @@ Works with both simple downloads and variable priced downloads.
 3. Checkout price - requires EDD 2.3!
 4. Admin download sale price setting
 5. Admin download variable sale price settings
+6. Another download detail page example
 
 == Changelog ==
 
