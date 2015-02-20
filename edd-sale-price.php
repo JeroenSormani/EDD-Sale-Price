@@ -2,7 +2,7 @@
 /**
  * Plugin Name: 	EDD Sale Price
  * Plugin URI:		http://jeroensormani.com
- * Description:		Discount your digital products.
+ * Description:		Put your digital products on sale.
  * Version: 		1.0.0
  * Author: 			Jeroen Sormani
  * Author URI: 		http://www.jeroensormani.com/

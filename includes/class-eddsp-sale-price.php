@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * Sale price class manages the actual price changing.
  *
- * @class       EDDSP_Sale_Price
- * @version     1.0.0
- * @author      Pozly
+ * @class		EDDSP_Sale_Price
+ * @version		1.0.0
+ * @author		Jeroen Sormani
  */
 class EDDSP_Sale_Price {
 
@@ -25,6 +25,9 @@ class EDDSP_Sale_Price {
 
 		// Modify variable prices
 		add_filter( 'edd_get_variable_prices', array( $this, 'maybe_display_variable_sale_prices' ), 10, 2 );
+
+		// Modify edd_price() function
+		add_filter( 'edd_download_price_after_html', array( $this, 'edd_price_maybe_display_sale_price' ), 10, 4 );
 
 		add_filter( 'edd_purchase_link_args', array( $this, 'maybe_display_sale_price_text' ) );
 
@@ -101,30 +104,105 @@ class EDDSP_Sale_Price {
 	}
 
 
+	/**
+	 * Sale price for edd_price().
+	 *
+	 * Display the sale price for the function edd_price().
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param	string	$formatted_price 	Formatted price label, includes span wrapper.
+	 * @param	int		$download_id		ID of the download.
+	 * @param	string	$price				Formatted price label.
+	 * @param	int		$price_id			If its a variable priced product, the price ID.
+	 * @return	string						Formatted price label with sale price.
+	 */
+	public function edd_price_maybe_display_sale_price( $formatted_price, $download_id, $price, $price_id ) {
+
+		if ( edd_has_variable_prices( $download_id ) ) :
+
+			$prices = edd_get_variable_prices( $download_id );
+
+			if ( false !== $price_id && isset( $prices[ $price_id ] ) ) {
+				$regular_price 	= (float) $prices[ $price_id ]['regular_amount'];
+				$sale_price 	= (float) $prices[ $price_id ]['sale_price'];
+			} else {
+
+				// Get lowest price id
+				foreach ( $prices as $key => $price ) {
+
+					if ( empty( $price['amount'] ) ) {
+						continue;
+					}
+
+					if ( ! isset( $min ) ) {
+						$min = $price['amount'];
+					} else {
+						$min = min( $min, $price['amount'] );
+					}
+
+					if ( $price['amount'] == $min ) {
+						$min_id = $key;
+					}
+
+				}
+				$lowest_id = $min_id;
+
+				// Set prices
+				$regular_price 	= isset( $prices[ $lowest_id ]['regular_amount'] ) ? $prices[ $lowest_id ]['regular_amount'] : $prices[ $lowest_id ]['amount'];
+				$sale_price 	= isset( $prices[ $lowest_id ]['sale_price'] ) ? $prices[ $lowest_id ]['sale_price'] : null;
+
+			}
+
+		else :
+
+			$regular_price 	= get_post_meta( $download_id, 'edd_price', true );
+			$sale_price 	= get_post_meta( $download_id, 'edd_sale_price', true );
+
+		endif;
+
+		if ( isset( $sale_price ) && ! empty( $sale_price ) ) :
+			$formatted_price = '<del>' . edd_currency_filter( edd_format_amount( $regular_price ) ) . '</del>&nbsp;' . $formatted_price;
+		endif;
+
+		return $formatted_price;
+
+	}
+
+
+	/**
+	 * Purchase button sale price.
+	 *
+	 * Display the strikethrough regular price on the purchase button.
+	 * Currently not enabled because it looks like value is loaded over JS,
+	 * and the HTML tag 's' is visible for a second.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param	array	$args	List of arguments for the payment button.
+	 * @return	array			List of arguments for the payment button.
+	 */
 	public function maybe_display_sale_price_text( $args ) {
 return $args;
+
 		$add_to_cart_text 	= edd_get_option( 'add_to_cart_text' );
 		$default_args 		= apply_filters( 'edd_purchase_link_defaults', array(
 			'text' => ! empty( $add_to_cart_text ) ? $add_to_cart_text : __( 'Purchase', 'edd' ),
 		) );
-print_r($args);
 
-		$download = new EDD_Download( $args['download_id'] );
+		$download 			= new EDD_Download( $args['download_id'] );
+		$variable_pricing	= $download->has_variable_prices();
+		$data_variable		= $variable_pricing ? ' data-variable-price="yes"' : 'data-variable-price="no"';
+		$type				= $download->is_single_price_mode() ? 'data-price-mode=multi' : 'data-price-mode=single';
 
-		$variable_pricing = $download->has_variable_prices();
-		$data_variable    = $variable_pricing ? ' data-variable-price="yes"' : 'data-variable-price="no"';
-		$type             = $download->is_single_price_mode() ? 'data-price-mode=multi' : 'data-price-mode=single';
-
+		// Bail if its a variable priced button
+		if ( $variable_pricing ) :
+			return $args;
+		endif;
 
 		if ( $args['price'] && $args['price'] !== 'no' ) {
-
-			if ( $variable_pricing && false !== $args['price_id'] ) {
-				$price_id	= $args['price_id'];
-				$prices		= $download->prices;
-				$sale_price	= isset( $prices[ $price_id ] ) ? $prices[ $price_id ]['sale_price'] : false;
-			} elseif ( ! $variable_pricing ) {
-				$sale_price = get_post_meta( $args['download_id'], 'edd_sale_price', true );
-			}
+			$regular_price 	= get_post_meta( $args['download_id'], 'edd_price', true );
+			$sale_price 	= get_post_meta( $args['download_id'], 'edd_sale_price', true );
 		}
 
 		if ( ! isset( $sale_price ) || empty( $sale_price ) ) :
@@ -136,7 +214,7 @@ print_r($args);
 		if ( isset( $sale_price ) && false !== $sale_price ) {
 
 			if ( 0 != $sale_price ) {
-				$args['text'] = '<s>' . edd_currency_filter( edd_format_amount( $sale_price ) ) . '</s>' . $button_text;
+				$args['text'] = '<s>' . edd_currency_filter( edd_format_amount( $regular_price ) ) . '</s>&nbsp;' . edd_currency_filter( edd_format_amount( $sale_price ) ) . $button_text;
 			}
 
 		}
@@ -150,7 +228,7 @@ print_r($args);
 	 * Checkout sale price.
 	 *
 	 * Display the sale price, and the regular price with a strike at the checkout.
-	 * This requires a hook added in EDD 2.4.0
+	 * This requires a hook added in EDD 2.3.0
 	 *
 	 * @since 1.0.0, EDD 2.4.0
 	 *
@@ -223,7 +301,7 @@ print_r($args);
 	 * Display variable price.
 	 *
 	 * Display the variable price with a strikethrough in the list.
-	 * WARNING! This function replaces an entire EDD function!
+	 * NOTE! This function replaces an entire EDD function!
 	 *
 	 * @since 1.0.0
 	 *

@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * Admin product class adds settings to the product edit screen.
  *
- * @class       EDDSP_Admin_Product
- * @version     1.0.0
- * @author      Jeroen Sormani
+ * @class		EDDSP_Admin_Product
+ * @version		1.0.0
+ * @author		Jeroen Sormani
  */
 class EDDSP_Admin_Product {
 
@@ -68,7 +68,7 @@ class EDDSP_Admin_Product {
 			$price_args = array(
 				'name'	=> 'edd_sale_price',
 				'value'	=> '',
-				'value' => isset( $sale_price ) ? esc_attr( edd_format_amount( $sale_price ) ) : '',
+				'value' => ! empty( $sale_price ) ? esc_attr( edd_format_amount( $sale_price ) ) : '',
 				'class'	=> 'edd-price-field edd-sale-price-field'
 			);
 
@@ -154,7 +154,7 @@ class EDDSP_Admin_Product {
 	public function variable_sale_price_field( $post_id, $key, $args ) {
 
 		$defaults = array(
-			'sale_price'   => null,
+			'sale_price' => null,
 		);
 		$args = wp_parse_args( $args, $defaults );
 
