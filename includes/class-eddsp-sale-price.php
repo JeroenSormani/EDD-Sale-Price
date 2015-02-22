@@ -192,8 +192,6 @@ return $args;
 
 		$download 			= new EDD_Download( $args['download_id'] );
 		$variable_pricing	= $download->has_variable_prices();
-		$data_variable		= $variable_pricing ? ' data-variable-price="yes"' : 'data-variable-price="no"';
-		$type				= $download->is_single_price_mode() ? 'data-price-mode=multi' : 'data-price-mode=single';
 
 		// Bail if its a variable priced button
 		if ( $variable_pricing ) :
