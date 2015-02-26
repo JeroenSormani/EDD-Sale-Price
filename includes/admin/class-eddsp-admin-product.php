@@ -67,7 +67,6 @@ class EDDSP_Admin_Product {
 
 			$price_args = array(
 				'name'	=> 'edd_sale_price',
-				'value'	=> '',
 				'value' => ! empty( $sale_price ) ? esc_attr( edd_format_amount( $sale_price ) ) : '',
 				'class'	=> 'edd-price-field edd-sale-price-field'
 			);
@@ -114,7 +113,7 @@ class EDDSP_Admin_Product {
 	 * @since 1.0.0
 	 *
 	 * @param	array $args 	List of existing arguments being passed.
-	 * @param	array $vaues 	List of set values for this specific price variation.
+	 * @param	array $values 	List of set values for this specific price variation.
 	 * @return	array			List of modified arguments being passed.
 	 */
 	public function edd_price_row_args( $args, $values ) {
@@ -162,7 +161,6 @@ class EDDSP_Admin_Product {
 
 			$price_args = array(
 				'name'	=> 'edd_variable_prices[' . $key . '][sale_price]',
-				'value'	=> $args['sale_price'],
 				'value' => ! empty( $args['sale_price'] ) ? esc_attr( edd_format_amount( $args['sale_price'] ) ) : '',
 				'class'	=> 'edd-price-field edd-sale-price-field'
 			);
