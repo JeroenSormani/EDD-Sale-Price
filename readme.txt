@@ -15,7 +15,7 @@ Promote your downloads with a sale price!
 
 Numerous studies have shown that people are more likely to buy a product, no matter what, if it is has a discount. Specially if it is something they already wanted to have. The discount will trigger the potential customer to buy your products fast.
 
-Setting up a discount correctly is important, of course you can just lower the price, but then most people will not know the product is discounted. With EDD Sale Price the regular price will be shown with a strikethrough so people will see how much it regulary costs, and what the new sale price is!
+Setting up a discount correctly is important, of course you can just lower the price, but then most people will not know the product is discounted. With EDD Sale Price the regular price will be shown with a strikethrough so people will see how much it regularly costs, and what the new sale price is!
 
 Works with both simple downloads and variable priced downloads.
 
