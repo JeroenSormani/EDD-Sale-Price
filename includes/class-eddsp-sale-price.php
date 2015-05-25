@@ -183,7 +183,10 @@ class EDDSP_Sale_Price {
 	 * @return	array			List of arguments for the payment button.
 	 */
 	public function maybe_display_sale_price_text( $args ) {
-return $args;
+
+		if ( ! apply_filters( 'eddsp_display_regular_price_text_buy_button', false ) ) :
+			return $args;
+		endif;
 
 		$add_to_cart_text 	= edd_get_option( 'add_to_cart_text' );
 		$default_args 		= apply_filters( 'edd_purchase_link_defaults', array(
