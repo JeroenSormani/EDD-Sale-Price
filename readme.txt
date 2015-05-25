@@ -2,9 +2,9 @@
 Contributors: sormano, shopplugins
 Donate link: http://www.jeroensormani.com/donate/
 Tags: edd, easy digital downloads, edd sale, easy digital downloads sale, edd sale price, easy digital downloads sale price, edd promotion, easy digital downloads promotion, edd promo, easy digital downloads promo, edd discount, easy digital downloads discount
-Requires at least: 3.6
-Tested up to: 4.1.1
-Stable tag: 1.0.0
+Requires at least: 3.7
+Tested up to: 4.2
+Stable tag: 1.0.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -52,5 +52,12 @@ The checkout is one of those places where we improved this. But due to a new cha
 
 == Changelog ==
 
+= 1.0.1 - 25/05/2015 =
+
+* [Fix] - Sale price incorrect in admin dashboard
+* [Fix] - Incorrect sale price in cart when adding a variable download
+* [Improvement] - Add filter to allow the regular price with a strikethrough on the buy button.
+
 = 1.0.0 - 22/02/2015 =
+
 * Initial release
