@@ -162,7 +162,7 @@ class EDDSP_Sale_Price {
 		endif;
 
 		if ( isset( $sale_price ) && ! empty( $sale_price ) ) :
-			$formatted_price = '<del>' . edd_currency_filter( edd_format_amount( $regular_price ) ) . '</del>&nbsp;' . $formatted_price;
+			$formatted_price = '<del>' . edd_currency_filter( edd_format_amount( $regular_price ) ) . '</del>&nbsp;' . edd_currency_filter( edd_format_amount( $sale_price ) );
 		endif;
 
 		return $formatted_price;
