@@ -4,7 +4,7 @@ Donate link: http://www.jeroensormani.com/donate/
 Tags: edd, easy digital downloads, edd sale, easy digital downloads sale, edd sale price, easy digital downloads sale price, edd promotion, easy digital downloads promotion, edd promo, easy digital downloads promo, edd discount, easy digital downloads discount
 Requires at least: 3.7
 Tested up to: 4.2
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,10 @@ The checkout is one of those places where we improved this. But due to a new cha
 6. Another download detail page example
 
 == Changelog ==
+
+= 1.0.2 - 18/07/2015 =
+
+* [i18n] - Add French translation
 
 = 1.0.1 - 25/05/2015 =
 
