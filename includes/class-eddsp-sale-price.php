@@ -249,7 +249,7 @@ class EDDSP_Sale_Price {
 		if ( $download->has_variable_prices() ) :
 			$prices = $download->get_prices();
 			$regular_price 	= isset( $prices[ $options['price_id'] ]['regular_amount'] ) ? $prices[ $options['price_id'] ]['regular_amount'] : $regular_price;
-			$sale_price 	= $prices[ $options['price_id'] ]['sale_price'];
+			$sale_price 	= isset( $prices[ $options['price_id'] ]['sale_price'] ) ? $prices[ $options['price_id'] ]['sale_price'] : '';
 		else :
 			$sale_price	= get_post_meta( $item_id, 'edd_sale_price', true );
 		endif;
