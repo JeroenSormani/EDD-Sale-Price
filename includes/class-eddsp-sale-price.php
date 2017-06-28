@@ -49,9 +49,9 @@ class EDDSP_Sale_Price {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	double 	$price 			Regular price of the product.
+	 * @param	float 	$price 			Regular price of the product.
 	 * @param	int		$download_id	ID of the download we're changing the price for.
-	 * @return	double					The new price, if the product is in sale this will be the sale price.
+	 * @return	float					The new price, if the product is in sale this will be the sale price.
 	 */
 	public function maybe_display_sale_price( $price, $download_id ) {
 
@@ -81,7 +81,7 @@ class EDDSP_Sale_Price {
 	 *
 	 * @param	array 	$prices 		Array of regular prices for a single product.
 	 * @param	int		$download_id	ID of the download we're changing the price for.
-	 * @return	double					Array of new prices, if the variant is in sale this will be the sale price.
+	 * @return	float					Array of new prices, if the variant is in sale this will be the sale price.
 	 */
 	public function maybe_display_variable_sale_prices( $prices, $download_id ) {
 
@@ -90,14 +90,16 @@ class EDDSP_Sale_Price {
 			return $prices;
 		endif;
 
-		foreach ( $prices as $key => $price ) :
+		if ( is_array( $prices ) ) :
+			foreach ( $prices as $key => $price ) :
 
-			if ( isset( $price['sale_price'] ) && ! empty( $price['sale_price'] ) ) :
-				$prices[ $key ]['regular_amount'] 	= $price['amount'];
-				$prices[ $key ]['amount'] 			= $price['sale_price'];
-			endif;
+				if ( isset( $price['sale_price'] ) && ! empty( $price['sale_price'] ) ) :
+					$prices[ $key ]['regular_amount'] = $price['amount'];
+					$prices[ $key ]['amount']         = $price['sale_price'];
+				endif;
 
-		endforeach;
+			endforeach;
+		endif;
 
 		return $prices;
 
@@ -233,9 +235,9 @@ class EDDSP_Sale_Price {
 	 *
 	 * @since 1.0.0, EDD 2.4.0
 	 *
-	 * @param	double 	$price 			Regular price of the product.
+	 * @param	float 	$price 			Regular price of the product.
 	 * @param	int		$download_id	ID of the download we're changing the price for.
-	 * @return	double					The new price, if the product is in sale this will be the sale price.
+	 * @return	float					The new price, if the product is in sale this will be the sale price.
 	 */
 	public function checkout_maybe_display_sale_price( $label, $item_id, $options ) {
 

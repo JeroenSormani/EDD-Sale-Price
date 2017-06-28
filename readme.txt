@@ -41,6 +41,14 @@ However, due to some restrictions within Easy Digital Downloads, it will current
 
 The checkout is one of those places where we improved this. But due to a new change, it does require Easy Digital Downloads 2.3+
 
+= Can I display the regular price within the purchase button? =
+
+It is possible through a code snippet, though there are two things to consider:
+1) The purchase button will become a lot bigger
+2) Due to the way the buttons are loaded, you will see (for example) \<s\>$50<\/s\> for about half a second. The 's' tags are there for the strikethrough. Its not ideal, but unfortunately we don't have any control over this.
+
+If you'd like to activate this: `add_filter( 'eddsp_display_regular_price_text_buy_button', '__return_true' );`
+
 == Screenshots ==
 
 1. Overview download listing
