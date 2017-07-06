@@ -35,8 +35,7 @@ class EDDSP_Sale_Price {
 		add_filter( 'edd_cart_item_price_label', array( $this, 'checkout_maybe_display_sale_price' ), 10, 3 );
 
 		// Variable price
-		remove_action( 'edd_purchase_link_top', 'edd_purchase_variable_pricing' );
-		add_action( 'edd_purchase_link_top', array( $this, 'edd_purchase_variable_pricing' ), 10, 2 );
+		add_filter( 'edd_price_option_output', array( $this, 'add_sales_price' ), 10, 6 );
 
 	}
 
@@ -302,71 +301,28 @@ class EDDSP_Sale_Price {
 
 
 	/**
-	 * Display variable price.
-	 *
 	 * Display the variable price with a strikethrough in the list.
-	 * NOTE! This function replaces an entire EDD function!
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.4
 	 *
-	 * @param	int		$download_id	ID of the download to get the labels for.
-	 * @param	array	$args			Array of arguments related to the download price.
+	 * @param	string	$price_output	The HTML output of the variable price
+	 * @param	int		$download_id	The ID of the download being viewed
+	 * @param	int		$key			The key of this variable price in the array of variable prices for this product.
+	 * @param	array	$price			The array of data about this price
+	 * @param	string	$form_id		The HTML ID of the form containing these variable prices
+	 * @param	string	$item_prop		The HTML item prop attribute
+	 * @param	string	$price_output	The filtered/modified HTML output of the variable price
 	 */
-	public function edd_purchase_variable_pricing( $download_id = 0, $args = array() ) {
+	public function add_sales_price( $price_output, $download_id, $key, $price, $form_id, $item_prop ) {
 
-		global $edd_options;
+		if ( isset( $price['sale_price'] ) && ! empty( $price['sale_price'] ) && isset( $price['regular_amount'] ) ) :
 
-		$variable_pricing = edd_has_variable_prices( $download_id );
-		$prices = apply_filters( 'edd_purchase_variable_prices', edd_get_variable_prices( $download_id ), $download_id );
+			// Re-construct the price output to include the sale price strikethrough.
+			$price_output = '<span class="edd_price_option_name"' . $item_prop . '>' . esc_html( $price['name'] ) . '</span><span class="edd_price_option_sep">&nbsp;&ndash;&nbsp;</span><span class="edd_price_option_price regular_price" itemprop="price"><del>' . edd_currency_filter( edd_format_amount( $price['regular_amount'] ) ) . '</del></span>&nbsp;<span class="edd_price_option_price">' . edd_currency_filter( edd_format_amount( $price['amount'] ) ) . '</span>';
 
-		if ( ! $variable_pricing || ( false !== $args['price_id'] && isset( $prices[$args['price_id']] ) ) ) {
-			return;
-		}
+		endif;
 
-		if ( edd_item_in_cart( $download_id ) && ! edd_single_price_option_mode( $download_id ) ) {
-			return;
-		}
-
-		$type = edd_single_price_option_mode( $download_id ) ? 'checkbox' : 'radio';
-		$mode = edd_single_price_option_mode( $download_id ) ? 'multi' : 'single';
-
-		do_action( 'edd_before_price_options', $download_id ); ?>
-		<div class="edd_price_options edd_<?php echo esc_attr( $mode ); ?>_mode">
-			<ul>
-				<?php
-				if ( $prices ) :
-					$checked_key = isset( $_GET['price_option'] ) ? absint( $_GET['price_option'] ) : edd_get_default_variable_price( $download_id );
-					foreach ( $prices as $key => $price ) :
-
-						?><li id="edd_price_option_<?php echo $download_id . '_' . sanitize_key( $price['name'] ); ?>" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-							<label for="<?php echo esc_attr( 'edd_price_option_' . $download_id . '_' . $key ); ?>">
-								<input type="<?php echo $type; ?>" <?php checked( apply_filters( 'edd_price_option_checked', $checked_key, $download_id, $key ), $key ); ?>
-									name="edd_options[price_id][]" id="<?php echo esc_attr( 'edd_price_option_' . $download_id . '_' . $key ); ?>"
-									class="<?php echo esc_attr( 'edd_price_option_' . $download_id ); ?>" value="<?php echo esc_attr( $key ); ?>"/>
-									<span class='edd_price_option_wrap'>
-										<span class="edd_price_option_name" itemprop="description"><?php echo esc_html( $price['name'] ); ?></span>
-										<span class="edd_price_option_sep">&ndash;</span>&nbsp;<?php
-
-										if ( isset( $price['sale_price'] ) && ! empty( $price['sale_price'] ) && isset( $price['regular_amount'] ) ) :
-											?><span class="edd_price_option_price regular_price" itemprop="price"><del><?php
-												echo edd_currency_filter( edd_format_amount( $price['regular_amount'] ) );
-											?></del></span>&nbsp;<?php
-										endif;
-
-										?><span class="edd_price_option_price" itemprop="price"><?php echo edd_currency_filter( edd_format_amount( $price['amount'] ) ); ?></span>
-									</span>
-							</label><?php
-								do_action( 'edd_after_price_option', $key, $price, $download_id );
-						?></li><?php
-
-					endforeach;
-				endif;
-				do_action( 'edd_after_price_options_list', $download_id, $prices, $type );
-				?>
-			</ul>
-		</div><!--end .edd_price_options-->
-		<?php
-		do_action( 'edd_after_price_options', $download_id );
+		return $price_output;
 
 	}
 
