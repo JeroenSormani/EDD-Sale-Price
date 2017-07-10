@@ -330,8 +330,17 @@ class EDDSP_Sale_Price {
 		$type = edd_single_price_option_mode( $download_id ) ? 'checkbox' : 'radio';
 		$mode = edd_single_price_option_mode( $download_id ) ? 'multi' : 'single';
 
+		// Filter the class names for the edd_price_options div
+		$css_classes_array = apply_filters( 'edd_price_options_classes', array(
+			'edd_price_options',
+			'edd_' . esc_attr( $mode ) . '_mode'
+		), $download_id );
+
+		// Sanitize those class names and form them into a string
+		$css_classes_string = implode( array_map( 'sanitize_html_class', $css_classes_array ), ' ' );
+
 		do_action( 'edd_before_price_options', $download_id ); ?>
-		<div class="edd_price_options edd_<?php echo esc_attr( $mode ); ?>_mode">
+		<div class="<?php echo esc_attr( rtrim( $css_classes_string ) ); ?>">
 			<ul>
 				<?php
 				if ( $prices ) :
