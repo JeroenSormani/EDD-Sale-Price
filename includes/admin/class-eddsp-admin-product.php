@@ -34,11 +34,8 @@ class EDDSP_Admin_Product {
 		// Add sale price to args
 		add_filter( 'edd_price_row_args', array( $this, 'edd_price_row_args' ), 10, 2 );
 
-		// Sale price table header
-		add_action( 'edd_download_price_table_head', array( $this, 'add_variable_sale_price_header' ) );
-
 		// Display sale price field
-		add_action( 'edd_download_price_table_row', array( $this, 'variable_sale_price_field' ), 5, 3 );
+		add_action( 'edd_download_price_option_row', array( $this, 'variable_sale_price_field' ), 1, 3 );
 
 	}
 
@@ -78,7 +75,7 @@ class EDDSP_Admin_Product {
 				echo EDD()->html->text( $price_args ) . ' ' . edd_currency_filter( '' ) . ' ';
 			endif;
 
-			?><label class="edd-label" for="edd_sale_price"><?php _e( 'Sale price', 'edd-sale-price' ); ?></label>&nbsp;<?php
+			_e( 'Sale price', 'edd-sale-price' );
 
 		?></div><?php
 
@@ -152,27 +149,26 @@ class EDDSP_Admin_Product {
 	 */
 	public function variable_sale_price_field( $post_id, $key, $args ) {
 
-		$defaults = array(
+		$args = wp_parse_args( $args, array(
 			'sale_price' => null,
+		) );
+
+		$price_args = array(
+			'name'	=> 'edd_variable_prices[' . $key . '][sale_price]',
+			'value' => ! empty( $args['sale_price'] ) ? esc_attr( edd_format_amount( $args['sale_price'] ) ) : '',
+			'class'	=> 'edd-price-field edd-sale-price-field'
 		);
-		$args = wp_parse_args( $args, $defaults );
 
-		?><td><?php
-
-			$price_args = array(
-				'name'	=> 'edd_variable_prices[' . $key . '][sale_price]',
-				'value' => ! empty( $args['sale_price'] ) ? esc_attr( edd_format_amount( $args['sale_price'] ) ) : '',
-				'class'	=> 'edd-price-field edd-sale-price-field'
-			);
-
-			$currency_position = edd_get_option( 'currency_position' );
-			if ( empty( $currency_position ) || $currency_position == 'before' ) :
-				?><span><?php echo '<span>' . edd_currency_filter( '' ) . ' ' . EDD()->html->text( $price_args ); ?></span><?php
-			else :
-				?><span><?php echo EDD()->html->text( $price_args ) . ' ' . edd_currency_filter( '' ); ?></span><?php
-			endif;
-
-		?></td><?php
+		?><div class="edd-custom-price-option-section">
+			<div class="edd-custom-price-option-section-content"><?php
+				$currency_position = edd_get_option( 'currency_position' );
+				if ( empty( $currency_position ) || $currency_position == 'before' ) :
+					?><span><?php echo edd_currency_filter( '' ) . ' ' . EDD()->html->text( $price_args ) . ' ' . __( 'Sale price', 'edd-sale-price' ); ?></span><?php
+				else :
+					?><span><?php echo EDD()->html->text( $price_args ) . ' ' . edd_currency_filter( '' ) . ' ' . __( 'Sale price', 'edd-sale-price' ); ?></span><?php
+				endif;
+			?></div>
+		</div><?php
 
 	}
 
