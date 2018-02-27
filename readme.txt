@@ -1,9 +1,10 @@
 === EDD Sale Price ===
-Contributors: sormano, shopplugins
+Contributors: sormano
 Tags: edd, easy digital downloads, edd sale, easy digital downloads sale, edd sale price, easy digital downloads sale price, edd promotion, easy digital downloads promotion, edd promo, easy digital downloads promo, edd discount, easy digital downloads discount
 Requires at least: 4.0
 Tested up to: 4.8.1
 Stable tag: 1.0.4
+Requires PHP: 5.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
