@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: 	EDD Sale Price
- * Plugin URI:		http://jeroensormani.com
+ * Plugin URI:		https://jeroensormani.com
  * Description:		Put your digital products on sale.
  * Version: 		1.0.4
  * Author:			Jeroen Sormani
- * Author URI: 		http://jeroensormani.com/
+ * Author URI: 		https://jeroensormani.com/
  * Text Domain: 	edd-sale-price
  */
 
@@ -42,7 +42,7 @@ class EDD_Sale_Price {
 
 
 	/**
-	 * Instace of EDD_Sale_Price.
+	 * Instance of EDD_Sale_Price.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -59,10 +59,7 @@ class EDD_Sale_Price {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
-		// Initialize plugin parts
 		$this->init();
-
 	}
 
 
@@ -76,13 +73,11 @@ class EDD_Sale_Price {
 	 * @return object Instance of the class.
 	 */
 	public static function instance() {
-
-		if ( is_null( self::$instance ) ) :
+		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
-		endif;
+		}
 
 		return self::$instance;
-
 	}
 
 
@@ -104,16 +99,10 @@ class EDD_Sale_Price {
 		require_once plugin_dir_path( __FILE__ ) . '/includes/class-eddsp-sale-price.php';
 		$this->price = new EDDSP_Sale_Price();
 
-		if ( is_admin() ) :
-
-			/**
-			 * Admin product class
-			 */
+		if ( is_admin() ) {
 			require_once plugin_dir_path( __FILE__ ) . '/includes/admin/class-eddsp-admin-product.php';
 			$this->admin_product = new EDDSP_Admin_Product();
-
-		endif;
-
+		}
 	}
 
 
@@ -125,33 +114,26 @@ class EDD_Sale_Price {
 	 * @since 1.0.0
 	 */
 	public function load_textdomain() {
-
-		// Load textdomain
 		load_plugin_textdomain( 'edd-sale-price', false, basename( dirname( __FILE__ ) ) . '/languages' );
-
 	}
-
-
 }
 
 
-/**
- * The main function responsible for returning the EDD_Sale_Price object.
- *
- * Use this function like you would a global variable, except without needing to declare the global.
- *
- * Example: <?php EDD_Sale_Price()->method_name(); ?>
- *
- * @since 1.0.0
- *
- * @return object EDD_Sale_Price class object.
- */
-if ( ! function_exists( 'EDD_Sale_Price' ) ) :
+if ( ! function_exists( 'EDD_Sale_Price' ) ) {
 
- 	function EDD_Sale_Price() {
+	/**
+	 * The main function responsible for returning the EDD_Sale_Price object.
+	 *
+	 * Use this function like you would a global variable, except without needing to declare the global.
+	 *
+	 * Example: <?php EDD_Sale_Price()->method_name(); ?>
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return object EDD_Sale_Price class object.
+	 */
+	function EDD_Sale_Price() {
 		return EDD_Sale_Price::instance();
 	}
-
-endif;
-
+}
 EDD_Sale_Price();

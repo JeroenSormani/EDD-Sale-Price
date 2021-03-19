@@ -37,6 +37,22 @@ class EDDSP_Admin_Product {
 		// Display sale price field
 		add_action( 'edd_download_price_option_row', array( $this, 'variable_sale_price_field' ), 1, 3 );
 
+//
+//		register_meta(
+//			'post',
+//			'edd_sale_price',
+//			array(
+//				'object_subtype'    => 'download',
+//				'sanitize_callback' => array( EDD_Register_Meta::instance(), 'sanitize_price' ),
+//				'type'              => 'float',
+//				'description'       => __( 'The price of the product.', 'easy-digital-downloads' ),
+//				'show_in_rest'      => true,
+//			)
+//		);
+//
+//		if ( ! has_filter( 'sanitize_post_meta_edd_sale_price' ) ) {
+//			add_filter( 'sanitize_post_meta_edd_sale_price', array( EDD_Register_Meta::instance(), 'sanitize_price' ), 10, 4 );
+//		}
 	}
 
 
@@ -115,7 +131,7 @@ class EDDSP_Admin_Product {
 	 */
 	public function edd_price_row_args( $args, $values ) {
 
-		$args['sale_price'] = isset( $values['sale_price'] ) ? $values['sale_price'] : '';
+		$args['sale_price'] = isset( $values['sale_price'] ) ? edd_sanitize_amount( $values['sale_price'] ) : '';
 
 		return $args;
 

@@ -40,6 +40,19 @@ class EDDSP_Sale_Price {
 	}
 
 
+	private function get_regular_price( $item_id ) {
+		$price = get_post_meta( $item_id, 'edd_price', true );
+
+		return edd_sanitize_amount( $price );
+	}
+
+	private function get_sale_price( $item_id ) {
+		$price = get_post_meta( $item_id, 'edd_sale_price', true );
+
+		return edd_sanitize_amount( $price );
+	}
+
+
 	/**
 	 * Sale price.
 	 *
@@ -59,11 +72,11 @@ class EDDSP_Sale_Price {
 			return $price;
 		endif;
 
-		$sale_price = get_post_meta( $download_id, 'edd_sale_price', true );
+		$sale_price = $this->get_sale_price( $download_id );
 
-		if ( ! empty( $sale_price ) ) :
+		if ( ! empty( $sale_price ) ) {
 			$price = $sale_price;
-		endif;
+		}
 
 		return $price;
 
@@ -157,8 +170,8 @@ class EDDSP_Sale_Price {
 
 		else :
 
-			$regular_price 	= get_post_meta( $download_id, 'edd_price', true );
-			$sale_price 	= get_post_meta( $download_id, 'edd_sale_price', true );
+			$regular_price 	= $this->get_regular_price( $download_id );
+			$sale_price 	= $this->get_sale_price( $download_id );
 
 		endif;
 
@@ -185,9 +198,9 @@ class EDDSP_Sale_Price {
 	 */
 	public function maybe_display_sale_price_text( $args ) {
 
-		if ( ! apply_filters( 'eddsp_display_regular_price_text_buy_button', false ) ) :
+		if ( ! apply_filters( 'eddsp_display_regular_price_text_buy_button', false ) ) {
 			return $args;
-		endif;
+		}
 
 		$add_to_cart_text 	= edd_get_option( 'add_to_cart_text' );
 		$default_args 		= apply_filters( 'edd_purchase_link_defaults', array(
@@ -198,18 +211,18 @@ class EDDSP_Sale_Price {
 		$variable_pricing	= $download->has_variable_prices();
 
 		// Bail if its a variable priced button
-		if ( $variable_pricing ) :
+		if ( $variable_pricing ) {
 			return $args;
-		endif;
-
-		if ( $args['price'] && $args['price'] !== 'no' ) {
-			$regular_price 	= get_post_meta( $args['download_id'], 'edd_price', true );
-			$sale_price 	= get_post_meta( $args['download_id'], 'edd_sale_price', true );
 		}
 
-		if ( ! isset( $sale_price ) || empty( $sale_price ) ) :
+		if ( $args['price'] && $args['price'] !== 'no' ) {
+			$regular_price 	= $this->get_regular_price( $args['download_id'] );
+			$sale_price 	= $this->get_sale_price( $args['download_id'] );
+		}
+
+		if ( ! isset( $sale_price ) || empty( $sale_price ) ) {
 			return $args;
-		endif;
+		}
 
 		$button_text = ! empty( $args['text'] ) ? '&nbsp;&ndash;&nbsp;' . $default_args['text'] : '';
 
@@ -218,11 +231,9 @@ class EDDSP_Sale_Price {
 			if ( 0 != $sale_price ) {
 				$args['text'] = '<s>' . edd_currency_filter( edd_format_amount( $regular_price ) ) . '</s>&nbsp;' . edd_currency_filter( edd_format_amount( $sale_price ) ) . $button_text;
 			}
-
 		}
 
 		return $args;
-
 	}
 
 
@@ -243,7 +254,7 @@ class EDDSP_Sale_Price {
 		global $edd_options;
 
 		$download		= new EDD_Download( $item_id );
-		$regular_price 	= get_post_meta( $item_id, 'edd_price', true );
+		$regular_price 	= $this->get_regular_price( $item_id );
 		$price 			= edd_get_cart_item_price( $item_id, $options );
 
 		// Get sale price if it exists
@@ -252,7 +263,7 @@ class EDDSP_Sale_Price {
 			$regular_price 	= isset( $prices[ $options['price_id'] ]['regular_amount'] ) ? $prices[ $options['price_id'] ]['regular_amount'] : $regular_price;
 			$sale_price 	= isset( $prices[ $options['price_id'] ]['sale_price'] ) ? $prices[ $options['price_id'] ]['sale_price'] : '';
 		else :
-			$sale_price	= get_post_meta( $item_id, 'edd_sale_price', true );
+			$sale_price	= $this->get_sale_price( $item_id );
 		endif;
 
 		// Bail if no sale price is set
