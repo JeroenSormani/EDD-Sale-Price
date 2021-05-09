@@ -23,9 +23,8 @@ class EDDSP_Admin_Product {
 		// Add simple sale price field
 		add_action( 'edd_after_price_field', array( $this, 'simple_sale_price_field' ) );
 
-		// Add fields to EDD save
-		add_filter( 'edd_metabox_fields_save', array( $this, 'save_custom_sale_fields' ) );
-
+		// Save custom sale field
+		add_action( 'edd_save_download', array( $this, 'save_custom_sale_fields' ) );
 
 		/*************************
 		 * Variable price hooks
@@ -37,22 +36,22 @@ class EDDSP_Admin_Product {
 		// Display sale price field
 		add_action( 'edd_download_price_option_row', array( $this, 'variable_sale_price_field' ), 1, 3 );
 
-//
-//		register_meta(
-//			'post',
-//			'edd_sale_price',
-//			array(
-//				'object_subtype'    => 'download',
-//				'sanitize_callback' => array( EDD_Register_Meta::instance(), 'sanitize_price' ),
-//				'type'              => 'float',
-//				'description'       => __( 'The price of the product.', 'easy-digital-downloads' ),
-//				'show_in_rest'      => true,
-//			)
-//		);
-//
-//		if ( ! has_filter( 'sanitize_post_meta_edd_sale_price' ) ) {
-//			add_filter( 'sanitize_post_meta_edd_sale_price', array( EDD_Register_Meta::instance(), 'sanitize_price' ), 10, 4 );
-//		}
+
+		register_meta(
+			'post',
+			'edd_sale_price',
+			array(
+				'object_subtype'    => 'download',
+				'sanitize_callback' => array( EDD_Register_Meta::instance(), 'sanitize_price' ),
+				'type'              => 'float',
+				'description'       => __( 'The sale price of the product.', 'easy-digital-downloads' ),
+				'show_in_rest'      => true,
+			)
+		);
+
+		if ( ! has_filter( 'sanitize_post_meta_edd_sale_price' ) ) {
+			add_filter( 'sanitize_post_meta_edd_sale_price', array( EDD_Register_Meta::instance(), 'sanitize_price' ), 10, 4 );
+		}
 	}
 
 
@@ -80,7 +79,7 @@ class EDDSP_Admin_Product {
 
 			$price_args = array(
 				'name'	=> 'edd_sale_price',
-				'value' => ! empty( $sale_price ) ? esc_attr( edd_format_amount( $sale_price ) ) : '',
+				'value' => is_numeric( $sale_price ) ? esc_attr( edd_format_amount( $sale_price ) ) : '',
 				'class'	=> 'edd-price-field edd-sale-price-field'
 			);
 
@@ -101,19 +100,18 @@ class EDDSP_Admin_Product {
 	/**
 	 * Save sale price.
 	 *
-	 * Save the sale price by adding it to the EDD post
-	 * meta saving list.
+	 * Save the sale price
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param	array $fields 	Existing array of fields to save.
-	 * @return	array			Modified array of fields to save.
+	 * @param	integer $post_id 	Post ID for this product
 	 */
-	public function save_custom_sale_fields( $fields ) {
+	public function save_custom_sale_fields( $post_id ) {
 
-		$fields[] = 'edd_sale_price';
-
-		return $fields;
+		if ( isset( $_POST[ 'edd_sale_price' ] ) ) {
+			$new = apply_filters( 'edd_metabox_save_edd_sale_price', $_POST[ 'edd_sale_price' ] );
+			update_post_meta( $post_id, 'edd_sale_price', $new );
+		}
 
 	}
 
@@ -171,7 +169,7 @@ class EDDSP_Admin_Product {
 
 		$price_args = array(
 			'name'	=> 'edd_variable_prices[' . $key . '][sale_price]',
-			'value' => ! empty( $args['sale_price'] ) ? esc_attr( edd_format_amount( $args['sale_price'] ) ) : '',
+			'value' => is_numeric( $args['sale_price'] ) ? esc_attr( edd_format_amount( $args['sale_price'] ) ) : '',
 			'class'	=> 'edd-price-field edd-sale-price-field'
 		);
 
