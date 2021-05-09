@@ -171,7 +171,7 @@ class EDDSP_Admin_Product {
 
 		$price_args = array(
 			'name'	=> 'edd_variable_prices[' . $key . '][sale_price]',
-			'value' => ! empty( $args['sale_price'] ) ? esc_attr( edd_format_amount( $args['sale_price'] ) ) : '',
+			'value' => ! empty( $args['sale_price'] ) ? esc_attr( $args['sale_price'] ) : '',
 			'class'	=> 'edd-price-field edd-sale-price-field'
 		);
 
