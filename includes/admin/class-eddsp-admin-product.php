@@ -133,7 +133,7 @@ class EDDSP_Admin_Product {
 			$price = 0;
 		}
 
-		return is_numeric( $price ) ? edd_sanitize_amount( $price ) : $price;
+		return '' != $price ? edd_sanitize_amount( $price ) : $price;
 	}
 
 	/**
