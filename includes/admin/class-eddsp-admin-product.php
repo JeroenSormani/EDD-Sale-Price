@@ -42,7 +42,7 @@ class EDDSP_Admin_Product {
 			'edd_sale_price',
 			array(
 				'object_subtype'    => 'download',
-				'sanitize_callback' => array( EDD_Register_Meta::instance(), 'sanitize_price' ),
+				'sanitize_callback' => array( $this, 'sanitize_price' ),
 				'type'              => 'float',
 				'description'       => __( 'The sale price of the product.', 'easy-digital-downloads' ),
 				'show_in_rest'      => true,
@@ -50,7 +50,7 @@ class EDDSP_Admin_Product {
 		);
 
 		if ( ! has_filter( 'sanitize_post_meta_edd_sale_price' ) ) {
-			add_filter( 'sanitize_post_meta_edd_sale_price', array( EDD_Register_Meta::instance(), 'sanitize_price' ), 10, 4 );
+			add_filter( 'sanitize_post_meta_edd_sale_price', array( $this, 'sanitize_price' ), 10, 4 );
 		}
 	}
 
@@ -109,12 +109,32 @@ class EDDSP_Admin_Product {
 	public function save_custom_sale_fields( $post_id ) {
 
 		if ( isset( $_POST[ 'edd_sale_price' ] ) ) {
-			$new = apply_filters( 'edd_metabox_save_edd_sale_price', $_POST[ 'edd_sale_price' ] );
+			if ( '' !== $_POST[ 'edd_sale_price' ] ) {
+				$new = apply_filters( 'edd_metabox_save_edd_sale_price', $_POST[ 'edd_sale_price' ] );
+			}
+
 			update_post_meta( $post_id, 'edd_sale_price', $new );
 		}
 
 	}
 
+	/**
+	 * Perform some sanitization on the amount field including not allowing negative values by default
+	 *
+	 * @since  1.0.5
+	 * @param  float $price The price to sanitize
+	 * @return float        A sanitized price
+	 */
+	public function sanitize_price( $price ) {
+
+		$allow_negative_prices = apply_filters( 'edd_allow_negative_prices', false );
+
+		if ( ! $allow_negative_prices && $price < 0 ) {
+			$price = 0;
+		}
+
+		return is_numeric( $price ) ? edd_sanitize_amount( $price ) : $price;
+	}
 
 	/**
 	 * Sale price args.
