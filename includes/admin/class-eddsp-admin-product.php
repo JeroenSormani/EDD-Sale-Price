@@ -109,7 +109,9 @@ class EDDSP_Admin_Product {
 	public function save_custom_sale_fields( $post_id ) {
 
 		if ( isset( $_POST[ 'edd_sale_price' ] ) ) {
-			if ( '' !== $_POST[ 'edd_sale_price' ] ) {
+			$new = sanitize_text_field( $_POST[ 'edd_sale_price' ] );
+			
+			if ( '' !== $new ) {
 				$new = apply_filters( 'edd_metabox_save_edd_sale_price', $_POST[ 'edd_sale_price' ] );
 			}
 
