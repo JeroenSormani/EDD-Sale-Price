@@ -105,7 +105,7 @@ class EDDSP_Sale_Price {
 		if ( is_array( $prices ) ) :
 			foreach ( $prices as $key => $price ) :
 
-				if ( isset( $price['sale_price'] ) && ! empty( $price['sale_price'] ) ) :
+				if ( isset( $price['sale_price'] ) && $price['sale_price'] != '' ) :
 					$prices[ $key ]['regular_amount'] = $price['amount'];
 					$prices[ $key ]['amount']         = $price['sale_price'];
 				endif;
@@ -175,7 +175,7 @@ class EDDSP_Sale_Price {
 
 		endif;
 
-		if ( isset( $sale_price ) && ! empty( $sale_price ) ) :
+		if ( isset( $sale_price ) && $sale_price != '' ) :
 			$formatted_price = '<del>' . edd_currency_filter( edd_format_amount( $regular_price ) ) . '</del>&nbsp;' . edd_currency_filter( edd_format_amount( $sale_price ) );
 		endif;
 
@@ -220,7 +220,7 @@ class EDDSP_Sale_Price {
 			$sale_price 	= $this->get_sale_price( $args['download_id'] );
 		}
 
-		if ( ! isset( $sale_price ) || empty( $sale_price ) ) {
+		if ( ! isset( $sale_price ) || $sale_price == '' ) {
 			return $args;
 		}
 
@@ -326,7 +326,7 @@ class EDDSP_Sale_Price {
 	 */
 	public function add_sales_price( $price_output, $download_id, $key, $price, $form_id, $item_prop ) {
 
-		if ( isset( $price['sale_price'] ) && ! empty( $price['sale_price'] ) && isset( $price['regular_amount'] ) ) :
+		if ( isset( $price['sale_price'] ) && $price['sale_price'] != '' && isset( $price['regular_amount'] ) ) :
 
 			// Re-construct the price output to include the sale price strikethrough.
 			$price_output = '<span class="edd_price_option_name"' . $item_prop . '>' . esc_html( $price['name'] ) . '</span><span class="edd_price_option_sep">&nbsp;&ndash;&nbsp;</span><span class="edd_price_option_price regular_price" itemprop="price"><del>' . edd_currency_filter( edd_format_amount( $price['regular_amount'] ) ) . '</del></span>&nbsp;<span class="edd_price_option_price">' . edd_currency_filter( edd_format_amount( $price['amount'] ) ) . '</span>';
