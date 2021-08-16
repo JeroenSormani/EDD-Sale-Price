@@ -193,7 +193,7 @@ class EDDSP_Admin_Product {
 	 *
 	 * Modifications: ( Price != '' ) check to allow empty values.
 	 *
-	 * @since  NEWVERSION
+	 * @since 1.0.5
 	 *
 	 * @param  float $price The price to sanitize.
 	 * @return float        A sanitized price.
