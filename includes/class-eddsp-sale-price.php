@@ -49,7 +49,7 @@ class EDDSP_Sale_Price {
 	private function get_sale_price( $item_id ) {
 		$price = get_post_meta( $item_id, 'edd_sale_price', true );
 
-		return edd_sanitize_amount( $price );
+		return $price != '' ? edd_sanitize_amount( $price ) : '';
 	}
 
 
@@ -74,7 +74,7 @@ class EDDSP_Sale_Price {
 
 		$sale_price = $this->get_sale_price( $download_id );
 
-		if ( ! empty( $sale_price ) ) {
+		if ( ! empty( $sale_price) ) {
 			$price = $sale_price;
 		}
 
