@@ -74,7 +74,7 @@ class EDDSP_Sale_Price {
 
 		$sale_price = $this->get_sale_price( $download_id );
 
-		if ( ! empty( $sale_price) ) {
+		if ( ! empty( $sale_price ) ) {
 			$price = $sale_price;
 		}
 
