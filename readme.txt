@@ -1,10 +1,10 @@
 === EDD Sale Price ===
 Contributors: sormano
-Tags: edd, easy digital downloads, edd sale, easy digital downloads sale, edd sale price, easy digital downloads sale price, edd promotion, easy digital downloads promotion, edd promo, easy digital downloads promo, edd discount, easy digital downloads discount
-Requires at least: 4.0
-Tested up to: 5.8
-Stable tag: 1.0.5.1
-Requires PHP: 5.6
+Tags: easy digital downloads, easy digital downloads sale, edd sale price, easy digital downloads sale price, edd discount
+Requires at least: 5.0
+Tested up to: 6.5
+Stable tag: 1.0.5.2
+Requires PHP: 7.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -59,6 +59,10 @@ If you'd like to activate this: `add_filter( 'eddsp_display_regular_price_text_b
 6. Another download detail page example
 
 == Changelog ==
+
+= 1.0.5.2 - 06/05/2024 =
+
+* [Fix] - PHP 8.2 compatibility
 
 = 1.0.5.1 - 23/08/2021 =
 
