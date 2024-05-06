@@ -49,6 +49,8 @@ class EDD_Sale_Price {
 	 * @var object $instance The instance of EDD_Sale_Price.
 	 */
 	private static $instance;
+	public EDDSP_Sale_Price $price;
+	public EDDSP_Admin_Product $admin_product;
 
 
 	/**
