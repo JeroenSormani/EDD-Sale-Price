@@ -20,6 +20,9 @@ class EDDSP_Admin_Product {
 	 */
 	public function __construct() {
 
+		// Register post (download type) meta
+		add_action( 'admin_init', array( $this, 'register_meta' ) );
+
 		// Add simple sale price field
 		add_action( 'edd_after_price_field', array( $this, 'simple_sale_price_field' ) );
 
@@ -37,6 +40,17 @@ class EDDSP_Admin_Product {
 		// Display sale price field
 		add_action( 'edd_download_price_option_row', array( $this, 'variable_sale_price_field' ), 1, 3 );
 
+		if ( ! has_filter( 'sanitize_post_meta_edd_sale_price' ) ) {
+			add_filter( 'sanitize_post_meta_edd_sale_price', array( $this, 'sanitize_price' ), 10, 4 );
+		}
+	}
+
+	/**
+	 * Register post (download type) meta
+	 *
+	 * @return void
+	 */
+	public function register_meta() {
 
 		register_meta(
 			'post',
@@ -45,14 +59,11 @@ class EDDSP_Admin_Product {
 				'object_subtype'    => 'download',
 				'sanitize_callback' => array( $this, 'sanitize_price' ),
 				'type'              => 'float',
-				'description'       => __( 'The sale price of the product.', 'easy-digital-downloads' ),
+				'description'       => __( 'The sale price of the product.', 'edd-sale-price' ),
 				'show_in_rest'      => true,
 			)
 		);
 
-		if ( ! has_filter( 'sanitize_post_meta_edd_sale_price' ) ) {
-			add_filter( 'sanitize_post_meta_edd_sale_price', array( $this, 'sanitize_price' ), 10, 4 );
-		}
 	}
 
 

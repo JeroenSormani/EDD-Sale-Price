@@ -3,7 +3,7 @@ Contributors: sormano
 Tags: easy digital downloads, easy digital downloads sale, edd sale price, easy digital downloads sale price, edd discount
 Requires at least: 5.0
 Tested up to: 6.5
-Stable tag: 1.0.5.2
+Stable tag: 1.0.5.3
 Requires PHP: 7.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -59,6 +59,10 @@ If you'd like to activate this: `add_filter( 'eddsp_display_regular_price_text_b
 6. Another download detail page example
 
 == Changelog ==
+
+= 1.0.5.3 - 07/06/2025 =
+
+* [Fix] - Call __() after init
 
 = 1.0.5.2 - 06/05/2024 =
 
