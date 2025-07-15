@@ -3,7 +3,7 @@
  * Plugin Name: 	EDD Sale Price
  * Plugin URI:		https://jeroensormani.com
  * Description:		Put your digital products on sale.
- * Version: 		1.0.5.2
+ * Version: 		1.0.5.3
  * Author:			Jeroen Sormani
  * Author URI: 		https://jeroensormani.com/
  * Text Domain: 	edd-sale-price
@@ -29,7 +29,7 @@ class EDD_Sale_Price {
 	 * @since 1.0.0
 	 * @var string $version Plugin version number.
 	 */
-	public $version = '1.0.5.2';
+	public $version = '1.0.5.3';
 
 
 	/**
