@@ -1,8 +1,8 @@
-=== EDD Sale Price ===
+=== Sale Price for EDD ===
 Contributors: sormano
 Tags: easy digital downloads, easy digital downloads sale, edd sale price, easy digital downloads sale price, edd discount
 Requires at least: 5.0
-Tested up to: 6.5
+Tested up to: 6.8
 Stable tag: 1.0.5.3
 Requires PHP: 7.0
 License: GPLv3 or later

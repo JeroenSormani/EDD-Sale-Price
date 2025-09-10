@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: 	EDD Sale Price
+ * Plugin Name: 	Sale Price for EDD
  * Plugin URI:		https://jeroensormani.com
  * Description:		Put your digital products on sale.
  * Version: 		1.0.5.3
